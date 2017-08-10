@@ -12,15 +12,15 @@
 #include <PubSubClient.h>
 
 // you only need to change the settings here
-int RELAYPIN = 4; // D2
+int RELAYPIN = D2; // D2
 
-const char* ssid = "xxxxxx";
-const char* password = "xxxxxx";
+const char* ssid = "foo";
+const char* password = "bar";
 
-const char* mqtt_server = "xxxxxx";
-int mqtt_port = xxxxxx;
-const char* username = "xxxxxx";
-const char* pwd = "xxxxxx";
+const char* mqtt_server = "xxx.cloudmqtt.com";
+int mqtt_port = 1xxxx;
+const char* username = "xxx";
+const char* pwd = "xxx";
 
 // setting end
 
@@ -67,8 +67,11 @@ void setup_wifi() {
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    digitalWrite(LED_BUILTIN, LOW); // turn the LED on    
+    delay(250);
     Serial.print(".");
+    digitalWrite(LED_BUILTIN, HIGH); // turn the LED off
+    delay(250);       
   }
 
   Serial.println("");
@@ -90,6 +93,8 @@ void reconnect() {
       client.subscribe("relay/onoff");
 
       digitalWrite(LED_BUILTIN, LOW); // turn the LED on by making the voltage LOW
+
+      client.publish("relay/onoff", "Hello GA");
       
     } else {
       Serial.print("failed, rc=");
